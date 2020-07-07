@@ -1,16 +1,12 @@
 const fs = require("fs");
 const express = require("express");
 const multer = require("multer");
-var session = require('express-session');
 const OAuth2Data = require("./credentials.json");
-var TOKEN_PATH = "token.json"
-var ssn;
 var name,pic
 
 const { google } = require("googleapis");
 
 const app = express();
-app.use(session({secret:'XASDASDA'}));
 
 
 const CLIENT_ID = OAuth2Data.web.client_id;
@@ -80,8 +76,6 @@ app.post("/upload", (req, res) => {
       console.log(err);
       return res.end("Something went wrong");
     } else {
-        ssn = req.session;
-        const authClient = ssn.auth
       console.log(req.file.path);
       const drive = google.drive({ version: "v3",auth:oAuth2Client  });
       const fileMetadata = {
@@ -128,11 +122,6 @@ app.get("/google/callback", function (req, res) {
         console.log("Successfully authenticated");
         console.log(tokens)
         oAuth2Client.setCredentials(tokens);
-
-        ssn = req.session;
-
-        ssn.auth = oAuth2Client
-
 
 
         authed = true;
