@@ -96,9 +96,10 @@ app.post("/upload", (req, res) => {
             // Handle error
             console.error(err);
           } else {
-            console.log("File Id: ", file.id);
+            fs.unlinkSync(req.file.path)
             res.render("success",{name:name,pic:pic,success:true})
           }
+
         }
       );
     }
